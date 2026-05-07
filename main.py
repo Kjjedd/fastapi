@@ -40,6 +40,11 @@ def hello():
     return {"message": "안녕하세요 파이보 CI/CD"}
 
 
+@app.get("/")
+def root():
+    return {"message": "fastapi root is ready"}
+
+
 @app.get("/healthz")
 def healthz():
     return {"status": "ok"}
