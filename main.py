@@ -38,3 +38,8 @@ app.include_router(answer_router.router)
 @app.get("/hello")
 def hello():
     return {"message": "안녕하세요 파이보"}
+
+
+@app.get("/healthz")
+def healthz():
+    return {"status": "ok"}
