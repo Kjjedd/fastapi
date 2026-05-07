@@ -53,8 +53,18 @@ jobs:
         run: |
           git clone "https://x-access-token:${GH_PAT}@github.com/${MANIFEST_REPO}.git" manifest-repo
           cd manifest-repo
-          sed -i.bak "s|image: .*|          image: ${IMAGE_URI}|g" deployment.yaml
-          rm -f deployment.yaml.bak
+          python - <<'PY'
+          from pathlib import Path
+          import os
+
+          path = Path("deployment.yaml")
+          lines = path.read_text().splitlines()
+          for idx, line in enumerate(lines):
+              if "image:" in line:
+                  lines[idx] = f"          image: {os.environ['IMAGE_URI']}"
+                  break
+          path.write_text("\n".join(lines) + "\n")
+          PY
 
           git config user.name "$GIT_USER_NAME"
           git config user.email "$GIT_USER_EMAIL"
